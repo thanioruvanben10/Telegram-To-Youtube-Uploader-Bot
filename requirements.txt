@@ -2,6 +2,7 @@ async-lru==1.0.2
 cachetools==4.2.2
 certifi==2021.5.30
 charset-normalizer==2.0.6
+flask
 google-api-core==2.0.1
 google-api-python-client==2.22.0
 google-auth==2.1.0
