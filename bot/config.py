@@ -1,31 +1,49 @@
-import os import environ
+import os
+
 
 class Config:
 
-    BOT_TOKEN = environ['BOT_TOKEN']
+    BOT_TOKEN = os.environ.get("BOT_TOKEN")
 
-    SESSION_NAME = environ['SESSION_NAME']
+    SESSION_NAME = os.environ.get("SESSION_NAME", ":memory:")
 
-    API_ID = environ['API_ID']
+    API_ID = int(os.environ.get("API_ID"))
 
-    API_HASH = environ['API_HASH']
+    API_HASH = os.environ.get("API_HASH")
 
-    CLIENT_ID = environ['CLIENT_ID']
+    CLIENT_ID = os.environ.get("CLIENT_ID")
 
-    CLIENT_SECRET = CLIENT_SECRET']
+    CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
 
-    AUTH_USERS = list({int(x) for x in environ.get("AUTH_USERS", "").split()})
+    BOT_OWNER = int(os.environ.get("BOT_OWNER"))
 
-    VIDEO_DESCRIPTION = environ['VIDEO_DESCRIPTION']
+    AUTH_USERS_TEXT = os.environ.get("AUTH_USERS", "")
 
-    VIDEO_CATEGORY = environ['VIDEO_CATEGORY']
+    AUTH_USERS = [BOT_OWNER] + (
+        [int(user.strip()) for user in AUTH_USERS_TEXT.split(",")]
+        if AUTH_USERS_TEXT
+        else []
+    )
 
-    VIDEO_TITLE_PREFIX = environ['VIDEO_TITLE_PREFIX']
+    VIDEO_DESCRIPTION = (
+        os.environ.get("VIDEO_DESCRIPTION", "").replace("<", "").replace(">", "")
+    )
 
-    VIDEO_TITLE_SUFFIX = environ['VIDEO_TITLE_SUFFIX']
-    
-    DEBUG = bool()
+    VIDEO_CATEGORY = (
+        int(os.environ.get("VIDEO_CATEGORY")) if os.environ.get("VIDEO_CATEGORY") else 0
+    )
 
-    UPLOAD_MODE = environ['UPLOAD_MODE']
-    
+    VIDEO_TITLE_PREFIX = os.environ.get("VIDEO_TITLE_PREFIX", "")
+
+    VIDEO_TITLE_SUFFIX = os.environ.get("VIDEO_TITLE_SUFFIX", "")
+
+    DEBUG = bool(os.environ.get("DEBUG"))
+
+    UPLOAD_MODE = os.environ.get("UPLOAD_MODE") or False
+    if UPLOAD_MODE:
+        if UPLOAD_MODE.lower() in ["private", "public", "unlisted"]:
+            UPLOAD_MODE = UPLOAD_MODE.lower()
+        else:
+            UPLOAD_MODE = False
+
     CRED_FILE = "auth_token.txt"
